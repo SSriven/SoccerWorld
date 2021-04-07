@@ -50,5 +50,6 @@ def getSoccerDetail(page_id, type_id):
     else:
         label = "五洲"
     detail_page["label"] = label
+    detail_page["comment"] = []
     # print(detail_page)
     return detail_page

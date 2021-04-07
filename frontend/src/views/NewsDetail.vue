@@ -1,27 +1,14 @@
 <template>
   <div class="news-detail" :style="{height:clientHeight + 'px'}">
     <header>
-      <i class="el-icon-arrow-left back"></i>
+      <i class="el-icon-arrow-left back" @click="backHome"></i>
       <span class="app-name">足球天下</span>
     </header>
     <section :style="{height:(clientHeight-40) + 'px'}">
       <article>
-        <p class='title'>皇马多赛一场积分暂时反超巴萨，落后榜首马竞3分</p>
-        <p class="author">桀骜丶野心家 04-04 00:28</p>
-        <div class="con">
-          <div>
-            <p>皇马2-0击败埃瓦尔，在最新的西甲积分榜上，他们也暂时超过了巴萨。</p>
-            <p>
-              <img src="https://xyimg1.qunliao.info/fastdfs6/M00/02/B6/720x-/-/-/rBUCgGBolwiAVDZ_AATC2NkDL6w216.jpg?watermark/1/image/aHR0cDovL2ltZzEuZG9uZ3FpdWRpLmNvbS9mYXN0ZGZzMi9NMDAvMkEvRTIvQ2hPcU0xb1MtZVdBUERxM0FBQkE1VWdyQlQ4MTQyLnBuZz9pbWFnZVZpZXcyLzAvdy8xMjA=/dissolve/100/dx/14/dy/10"/>
-            </p>
-            <p>皇马本轮西甲率先出战，依靠本泽马和阿森西奥的进球，皇马在主场2-0轻取埃瓦尔。</p>
-            <p>本场胜利后，皇马在多赛一场的情况下积63分，反超了少赛一场的巴萨(62分)，并距离榜首少赛一场的马竞3分。</p>
-            <p>
-              本轮西甲联赛，巴萨将对阵巴拉多利德，马竞将
-              客战塞维利亚。
-            </p>
-          </div>
-        </div>
+        <p class='title'>{{page.title}}</p>
+        <p class="author">{{page.author}}</p>
+        <div v-html="page.content" class="content">{{page.content}}</div>
       </article>
       <div class="reply">
           <p class="reply-head">
@@ -34,12 +21,33 @@
 </template>
 
 <script>
+import detailData from "../api/api_soccer"
 export default {
   name: "NewsDetail",
   data() {
     return {
-      clientHeight: document.body.clientHeight
+      clientHeight: document.body.clientHeight,
+      page:{}
     };
+  },
+  created(){
+    console.log("created newsdatail")
+  },
+  mounted(){
+    console.log("mounted newsdatail",this.$route.query)
+    let pageid = this.$route.query.pageid
+    let typeid = this.$route.query.typeid
+    detailData.getNewsDetail(pageid,typeid).then(res=>{
+      console.log(res)
+      this.page = res
+    }).catch(err=>{
+      console.log(err)
+    })
+  },
+  methods:{
+    backHome(){
+      this.$router.go(-1)
+    }
   }
 };
 </script>
@@ -80,8 +88,12 @@ article{
     overflow-y: scroll;
     padding:10px;
 }
-article p{
+.content{
     text-align: left;
+    width: 100%;
+}
+.content img{
+  width: 100%;
 }
 .title{
     font-size: 23px;
@@ -94,9 +106,6 @@ article p{
     font-size: 13px;
     padding-bottom: 10px;
     text-align: left;
-}
-.con img{
-    width: 100%;
 }
 .reply{
     margin-top: 20px;

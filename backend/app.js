@@ -23,7 +23,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 //跨域设置
 app.all('*', function(req, res, next) {
   //设为指定的域
-  res.header('Access-Control-Allow-Origin', 'http://192.168.0.5:8080');
+  res.header('Access-Control-Allow-Origin', 'http://localhost:8080');
   res.header("Access-Control-Allow-Headers", "X-Requested-With");
   res.header('Access-Control-Allow-Headers', 'Content-Type');
   res.header("Access-Control-Allow-Methods", "PUT,POST,GET,DELETE,OPTIONS");

@@ -58,10 +58,11 @@ def getNewsDetail(detail_url):
     content = soup.select(".con")[0]
     new_content = re.sub(r1, "", str(content))
     new_content = re.sub(r2, "", new_content)
-    new_content = re.sub(r3, "", new_content)
+    new_content = re.sub(r3, "width='100%'", new_content)
     new_content = re.sub(r4, "", new_content)
     new_content = re.sub(r5, "", new_content)
     author = soup.select(".news-left>.tips")[0].text
+    print(new_content)
     # print(author)
     obj = {
         "title": title,

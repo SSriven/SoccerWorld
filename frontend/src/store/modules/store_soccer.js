@@ -12,17 +12,25 @@ const actions = {
      */
     getSoccerNewsList({commit},typeid){
         console.log("调用获取足球新闻列表action" , typeid)
-        return soccerData.getSoccerNewsList(typeid).then((res,err)=>{
-            console.log(res)
-            return new Promise((resolve, reject)=>{
-                if(res){
-                    commit('handleSoccerNewsList',res)
-                    resolve(res)
-                }
-                else
-                    reject(err)
+        return new Promise((resolve, reject)=>{
+            soccerData.getSoccerNewsList(typeid).then(res=>{
+                commit('handleSoccerNewsList',res)
+                resolve(res)
+            }).catch(err=>{
+                reject(err)
             })
         })
+        // return soccerData.getSoccerNewsList(typeid).then((res,err)=>{
+        //     console.log(res)
+        //     return new Promise((resolve, reject)=>{
+        //         if(res){
+        //             commit('handleSoccerNewsList',res)
+        //             resolve(res)
+        //         }
+        //         else
+        //             reject(err)
+        //     })
+        // })
     },
 
     /**
@@ -35,16 +43,29 @@ const actions = {
         let typeid = obj.typeid;
         let last_time = obj.last_time;
         console.log("调用获取下一页新闻action" , typeid,last_time)
-        return soccerData.getMoreSoccerNewsList(typeid,last_time).then((res,err)=>{
-            console.log(res)
-            return new Promise((resolve,reject)=>{
-                if(res){
-                    commit('loadMoreNewsList',res)
-                    resolve(res)
-                }else
-                    reject(err)
+        return new Promise((resolve, reject)=>{
+            soccerData.getMoreSoccerNewsList(typeid,last_time).then(res=>{
+                commit('loadMoreNewsList',res)
+                resolve(res)
+            }).catch(err=>{
+                reject(err)
             })
         })
+        // return soccerData.getMoreSoccerNewsList(typeid,last_time).then((res,err)=>{
+        //     console.log(res)
+        //     return new Promise((resolve,reject)=>{
+        //         if(res){
+        //             commit('loadMoreNewsList',res)
+        //             resolve(res)
+        //         }else
+        //             reject(err)
+        //     })
+        // })
+    },
+
+    getRecommendNewsList({commit},userid){
+        console.log(userid)
+        commit('handleSoccerNewsList',[])
     }
 }
 const mutations = {

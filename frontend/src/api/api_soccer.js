@@ -15,12 +15,11 @@ export default {
      */
     getSoccerNewsList(typeid){
         // console.log("调用api"+typeid)
-        return request.get(baseUrl,{params:{"typeid":typeid}}).then((res,err) => {
-            return new Promise((resolve,reject)=>{
-                if(res.data)
-                    resolve(res.data)
-                else
-                    reject(err)
+        return new Promise((resolve,reject)=>{
+            request.get(baseUrl,{params:{"typeid":typeid}}).then(res=>{
+                resolve(res.data)
+            }).catch(err=>{
+                reject(err)
             })
         })
     },
@@ -31,14 +30,32 @@ export default {
      */
     getMoreSoccerNewsList(typeid,last_time){
         console.log("获取下一页新闻：",typeid,last_time);
-        return request.get(baseUrl + "/next",{params:{"typeid":typeid,"last_time":last_time}}).then((res,err)=>{
-            return new Promise((resolve,reject)=>{
-                if(res.data)
-                    resolve(res.data)
-                else
-                    reject(err)
+        return new Promise((resolve,reject)=>{
+            request.get(baseUrl + "/next",{params:{"typeid":typeid,"last_time":last_time}}).then(res=>{
+                resolve(res.data)
+            }).catch(err=>{
+                reject(err)
             })
         })
+    },
+
+    getNewsDetail(pageid,typeid){
+        console.log("获取新闻详情页",pageid,typeid)
+        return new Promise((resolve,reject)=>{
+            request.get(baseUrl + "/detail",{params:{"pageid":pageid,"typeid":typeid}}).then(res=>{
+                resolve(res)
+            }).catch(err=>{
+                reject(err)
+            })
+        })
+        // return request.get(baseUrl + "/detail",{params:{"pageid":pageid,"typeid":typeid}}).then((res,err)=>{
+        //     return new Promise((resolve,reject)=>{
+        //         if(res.data)
+        //             resolve(res.data)
+        //         else
+        //             reject(err)
+        //     })
+        // })
     }
 }
 

@@ -1,7 +1,7 @@
 <template>
     <div class="news-content" v-loading="loading" @scroll="scrollEvent" ref="scrollDiv">
-        <el-row v-for="item in soccerNewsList" 
-        :key="item.id" 
+        <el-row v-for="(item,index) in soccerNewsList" 
+        :key="index" 
         :newsid="item.id" 
         :typeid="item.type" 
         @click="handleNewsItem"
@@ -14,7 +14,8 @@
                 <img style="height:100%;width:100%" :src="item.thumb">
             </el-col>
         </el-row>
-        <div class="load-more" @click="handleLoadMore">点击加载更多</div>
+        <div v-if="soccerNewsList.length > 0" class="load-more" @click="handleLoadMore">点击加载更多</div>
+        <div v-else class="no-more">没有更多了</div>
         <div class="back-top" @click="handleBackTop"><i class="el-icon-top"></i></div>
     </div>
 </template>
@@ -47,12 +48,22 @@ export default {
     computed:{
         ...mapState('soccerStore',{
             soccerNewsList:state => state.soccerNewsList
+        }),
+        ...mapState('userStore',{
+            user_id:state => state.user_id
         })
     },
-    mounted(){
+    created(){
         this.init()
+        console.log("created")
+    },
+    mounted(){
         //监听新闻item的点击事件
         $(".news-content").on("click",".news-item",this.handleNewsItem);
+        console.log("mounted")
+    },
+    destroyed(){
+        console.log("destroyed")
     },
     methods:{
         /**
@@ -64,7 +75,8 @@ export default {
             $(".back-top").hide()
             this.loading = true;
             switch(this.newsType){
-                case "1":this.msg = "推荐页";this.loading = false;break;
+                case "0":this.msg = "推荐";this.getRecommendData();break;
+                case "1":this.msg = "快讯";this.getSoccerData("1");break;
                 case "3":this.msg = "英超";this.getSoccerData("3");break;
                 case "4":this.msg = "意甲";this.getSoccerData("4");break;
                 case "5":this.msg = "西甲";this.getSoccerData("5");break;
@@ -72,6 +84,13 @@ export default {
                 case "57":this.msg = "五洲";this.getSoccerData("57");break;
                 default:this.msg = "error";break;
             }
+        },
+        /**
+         * 获取推荐信息
+         */
+        getRecommendData(){
+            this.loading = false;
+            this.$store.dispatch('soccerStore/getRecommendNewsList',this.user_id)
         },
         /**
          * 获取足球新闻列表
@@ -91,7 +110,9 @@ export default {
          */
         handleNewsItem(e){
             console.log(e);
-            this.$router.push("/detail");
+            let pageid = e.currentTarget.attributes.newsid.value;
+            let typeid = e.currentTarget.attributes.typeid.value;
+            this.$router.push({ name: 'detail', query: { pageid, typeid } });
         },
         /**
          * 监听滚动事件
@@ -147,7 +168,8 @@ export default {
         },
         ...mapActions('soccerStore',[
             'getSoccerNewsList',
-            'getMoreSoccerNewsList'
+            'getMoreSoccerNewsList',
+            'getRecommendNewsList'
         ])
     }
 }
@@ -210,5 +232,10 @@ time{
 }
 .back-top:active{
     background: #666;
+}
+.no-more{
+    font-size: 13px;
+    margin-top: 10px;
+    color: #aaa;
 }
 </style>

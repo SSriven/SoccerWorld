@@ -11,7 +11,12 @@
         <el-row :gutter="20">
           <el-col :span="4">
             <div class="grid-content bg-purple">
-                <el-menu-item index="1">推荐</el-menu-item>
+                <el-menu-item index="0">推荐</el-menu-item>
+            </div>
+          </el-col>
+          <el-col :span="4">
+            <div class="grid-content bg-purple">
+                <el-menu-item index="1">快讯</el-menu-item>
             </div>
           </el-col>
           <el-col :span="4">
@@ -58,7 +63,7 @@ export default {
   name: "home",
   data() {
     return {
-      activeIndex: "1",
+      activeIndex: "0",
       sectionHeight:document.body.clientHeight - 120,
     };
   },
@@ -78,15 +83,30 @@ export default {
 }
 .el-menu-item{
     padding:0;
+    height: 60px;
 }
 .el-row{
   margin:0 !important;
 }
+.el-col-4{
+    display: inline-block;
+    float: unset;
+}
+
 header{
     height: 60px;
     position: relative;
     width: 100%;
     z-index: 999;
+    overflow: scroll;
+    overflow-x: scroll;
+    overflow-y: hidden;
+    white-space: nowrap;
+    border-bottom: solid 1px #e6e6e6;
+    box-sizing: border-box;
+}
+header::-webkit-scrollbar{
+      display: none;
 }
 section{
     position: relative;

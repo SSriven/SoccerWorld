@@ -3,6 +3,21 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+const bodyParser = require('body-parser')
+const mongoose = require('mongoose');            
+
+mongoose.connect('mongodb://localhost/sports')     //连接本地数据库blog 
+
+var db = mongoose.connection;
+
+// 连接成功
+db.on('open', function(){
+    console.log('MongoDB Connection Successed');
+});
+// 连接失败
+db.on('error', function(){
+    console.log('MongoDB Connection Error');
+});
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
@@ -14,6 +29,8 @@ var app = express();
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
 
+app.use(bodyParser.urlencoded({ extended: false }))    
+app.use(bodyParser.json())
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));

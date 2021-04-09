@@ -4,6 +4,7 @@
         :key="index" 
         :newsid="item.id" 
         :typeid="item.type" 
+        :currentindex="index"
         @click="handleNewsItem"
         class="news-item">
             <el-col :span="18" >
@@ -25,6 +26,7 @@ import {mapState ,mapActions} from "vuex"
 import $ from "jQuery"
 import Vue from "vue";
 import { Message } from "element-ui";
+import soccerData from "../../api/api_soccer"
 Vue.prototype.$message = Message;
 export default {
     name:"news-list-page",
@@ -59,6 +61,7 @@ export default {
     },
     mounted(){
         //监听新闻item的点击事件
+        // $(".news-content").scrollTop(0);
         $(".news-content").on("click",".news-item",this.handleNewsItem);
         console.log("mounted")
     },
@@ -71,7 +74,6 @@ export default {
          */
         init(){
             console.log("初始化 "+this.newsType)
-            $(".news-content").scrollTop(0);
             $(".back-top").hide()
             this.loading = true;
             switch(this.newsType){
@@ -112,6 +114,9 @@ export default {
             console.log(e);
             let pageid = e.currentTarget.attributes.newsid.value;
             let typeid = e.currentTarget.attributes.typeid.value;
+            let index = e.currentTarget.attributes.currentindex.value;
+            let newsobj = this.soccerNewsList[index]
+            soccerData.addHistory(this.user_id,newsobj)
             this.$router.push({ name: 'detail', query: { pageid, typeid } });
         },
         /**

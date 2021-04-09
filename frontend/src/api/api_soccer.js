@@ -39,6 +39,11 @@ export default {
         })
     },
 
+    /**
+     * 获取新闻详情页
+     * @param {}} pageid 
+     * @param {*} typeid 
+     */
     getNewsDetail(pageid,typeid){
         console.log("获取新闻详情页",pageid,typeid)
         return new Promise((resolve,reject)=>{
@@ -48,14 +53,17 @@ export default {
                 reject(err)
             })
         })
-        // return request.get(baseUrl + "/detail",{params:{"pageid":pageid,"typeid":typeid}}).then((res,err)=>{
-        //     return new Promise((resolve,reject)=>{
-        //         if(res.data)
-        //             resolve(res.data)
-        //         else
-        //             reject(err)
-        //     })
-        // })
+    },
+
+    addHistory(userphone,newsobj){
+        console.log("添加历史记录",newsobj)
+        return new Promise((resolve,reject)=>{
+            request.post(baseUrl + "/addHistory",{params:{"userphone":userphone,"newsobj":newsobj}}).then(res=>{
+                resolve(res)
+            }).catch(err=>{
+                reject(err)
+            })
+        })
     }
 }
 

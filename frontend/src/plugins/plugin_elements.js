@@ -18,7 +18,8 @@ import{
     TabPane,
     Menu,
     MenuItem,
-    Card
+    Card,
+    Avatar
 } from 'element-ui'
 
 Vue.use(Row)
@@ -37,5 +38,6 @@ Vue.use(TabPane)
 Vue.use(Menu)
 Vue.use(MenuItem)
 Vue.use(Card)
+Vue.use(Avatar)
 
 

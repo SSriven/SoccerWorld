@@ -1,5 +1,5 @@
 <template>
-  <div class="news-detail" :style="{height:clientHeight + 'px'}">
+  <div class="news-detail" :style="{height:clientHeight + 'px'}" v-loading="loading">
     <header>
       <i class="el-icon-arrow-left back" @click="backHome"></i>
       <span class="app-name">足球天下</span>
@@ -27,7 +27,8 @@ export default {
   data() {
     return {
       clientHeight: document.body.clientHeight,
-      page:{}
+      page:{},
+      loading:true
     };
   },
   created(){
@@ -40,6 +41,7 @@ export default {
     detailData.getNewsDetail(pageid,typeid).then(res=>{
       console.log(res)
       this.page = res
+      this.loading = false
     }).catch(err=>{
       console.log(err)
     })
@@ -61,10 +63,15 @@ header {
   height: 40px;
   background: #fff;
   line-height: 40px;
-  position: relative;
+  position: fixed;
   width: 100%;
   border-bottom: 1px solid #eee;
   box-sizing: border-box;
+  z-index: 999;
+}
+section{
+  position: relative;
+  top:40px;
 }
 .back {
   display: inline-block;

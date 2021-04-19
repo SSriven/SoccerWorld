@@ -55,6 +55,11 @@ export default {
         })
     },
 
+    /**
+     * 添加历史记录
+     * @param {*} userphone 
+     * @param {*} newsobj 
+     */
     addHistory(userphone,newsobj){
         console.log("添加历史记录",newsobj)
         return new Promise((resolve,reject)=>{

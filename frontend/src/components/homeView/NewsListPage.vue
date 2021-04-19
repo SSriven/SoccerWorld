@@ -192,6 +192,7 @@ export default {
     padding:18px 8px;
     border-bottom: 3px solid #eee;
     position: relative;
+    min-height: 110px;
 }
 .news-item.el-row:active{
     background: #eee;

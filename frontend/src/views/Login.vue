@@ -3,7 +3,7 @@
     <div class="login-header">足球天下</div>
     <div class="login-box">
       <el-form :model="ruleForm" status-icon label-width="100px" class="demo-ruleForm">
-        <el-row >
+        <el-row>
           <el-col :span="6">
             <div class="grid-content bg-purple">手机号</div>
           </el-col>
@@ -46,7 +46,7 @@
 <script>
 import Vue from "vue";
 import { Message } from "element-ui";
-import {mapMutations} from 'vuex'
+import { mapMutations, mapActions } from "vuex";
 Vue.prototype.$message = Message;
 export default {
   name: "Login",
@@ -58,7 +58,7 @@ export default {
       },
       sendCode: false,
       codeTime: 60,
-      loading:false
+      loading: false
     };
   },
   methods: {
@@ -80,17 +80,28 @@ export default {
         return false;
       }
       this.loading = !this.loading;
-      let loginSuccess = this.userLogin(this.ruleForm.count,this.ruleForm.code);
-      if(!loginSuccess){
+      let loginSuccess = this.userLogin(
+        this.ruleForm.count,
+        this.ruleForm.code
+      );
+      if (!loginSuccess) {
         this.$message("验证码错误");
         return false;
       }
-      setTimeout(()=>{
-        this.handleUserName(this.ruleForm.count)
-        this.handleLastLoginTime(new Date().getTime())
-        this.$router.push("/main");
-      },2000)
-      
+      let that = this;
+      console.log(that.ruleForm.count)
+      let userphone = that.ruleForm.count
+      this.$store
+        .dispatch("userStore/getUserById", userphone)
+        .then(() => {
+          that.handleUserName(userphone);
+          that.handleLastLoginTime(new Date().getTime());
+          that.$router.push("/main");
+        })
+        .catch(err => {
+          console.log(err);
+          that.$message("请求超时");
+        });
     },
     /**
      * 清除输入框
@@ -124,16 +135,15 @@ export default {
     /**
      * 用户登录
      */
-     userLogin(acct,code){
-      if(acct != "" && code != "")
-        return true;
+    userLogin(acct, code) {
+      if (acct != "" && code != "") return true;
     },
-    ...mapMutations('userStore',{
-      handleUserName:'handleUserName',
-      handleLastLoginTime:'handleLastLoginTime'
-    })
-  },
-  
+    ...mapMutations("userStore", {
+      handleUserName: "handleUserName",
+      handleLastLoginTime: "handleLastLoginTime"
+    }),
+    ...mapActions("userStore", ["getUserById"])
+  }
 };
 </script>
 

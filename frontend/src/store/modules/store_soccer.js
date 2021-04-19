@@ -20,17 +20,6 @@ const actions = {
                 reject(err)
             })
         })
-        // return soccerData.getSoccerNewsList(typeid).then((res,err)=>{
-        //     console.log(res)
-        //     return new Promise((resolve, reject)=>{
-        //         if(res){
-        //             commit('handleSoccerNewsList',res)
-        //             resolve(res)
-        //         }
-        //         else
-        //             reject(err)
-        //     })
-        // })
     },
 
     /**

@@ -11,7 +11,7 @@ const UserController = {
     /**
      * 获取所有用户信息
      */
-    getAllUsers: (cb,cberr) => {
+    getAllUsers: (cb, cberr) => {
         User.fetch((err, users) => {
             if (err) {
                 console.log(err)
@@ -25,7 +25,7 @@ const UserController = {
     /**
      * 根据用户手机号查询用户信息，如果查无此人，则插入一条数据
      */
-    getUserfindById: (userphone,cb,cberr) => {
+    getUserfindById: (userphone, cb, cberr) => {
         User.findById(userphone, (err, user) => {
             if (err) {
                 console.log(err)
@@ -34,12 +34,24 @@ const UserController = {
             }
             if (!user) {
                 defaultUsers.userphone = userphone
+                defaultUsers.nickname = "用户" + userphone
                 new User(defaultUsers).save().then(user => {
                     cb(user)
                 })
             }
             else
                 cb(user)
+        })
+    },
+
+    /**
+     * 修改用户头像
+     */
+    modifyUserThumb:(userphone,newthumb,cb,cberr)=>{
+        User.updateOne({userphone:userphone},{thumb:newthumb},(err,res)=>{
+            if(err)
+                cberr(err)
+            else  cb(res)
         })
     }
 }

@@ -25,10 +25,8 @@ export default {
      * @param {* 用户手机号} userphone 
      */
     getUserfindById(userphone){
-        console.log("通过id查询用户信息"+userphone)
         return new Promise((resolve,reject)=>{
             request.get(baseUrl+'/findById',{params:{id:userphone}}).then(res=>{
-                console.log(res)
                 resolve(res)
             }).catch(err=>{
                 reject(err)
@@ -81,6 +79,17 @@ export default {
     modifyUserNickName:(userphone,nickname)=>{
         return new Promise((resolve,reject)=>{
             request.post(baseUrl + '/modifyNickName',{id:userphone,nickname:nickname}).then(res=>{
+                resolve(res)
+            }).catch(err=>reject(err))
+        })
+    },
+
+    /**
+     * 查找用户历史足迹和动态
+     */
+    findUserHistories:(userphone)=>{
+        return new Promise((resolve,reject)=>{
+            request.get(baseUrl + "/findUserHistories",{params:{id:userphone}}).then(res=>{
                 resolve(res)
             }).catch(err=>reject(err))
         })

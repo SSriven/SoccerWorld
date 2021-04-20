@@ -27,6 +27,7 @@ const routes = [
     name: 'main',
     component: Main,
     meta:{
+      requireAuth: true,
       keepAlive:true
     }
   },

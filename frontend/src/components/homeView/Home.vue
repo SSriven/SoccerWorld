@@ -74,6 +74,9 @@ export default {
     handleSelect(key) {
       this.activeIndex = key;
     }
+  },
+  destroyed(){
+    this.activeIndex = "0";
   }
 };
 </script>

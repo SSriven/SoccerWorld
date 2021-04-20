@@ -93,10 +93,12 @@ export default {
       let userphone = that.ruleForm.count
       this.$store
         .dispatch("userStore/getUserById", userphone)
-        .then(() => {
+        .then((res) => {
+          console.log("登陆成功",res)
           that.handleUserName(userphone);
           that.handleLastLoginTime(new Date().getTime());
           that.$router.push("/main");
+          
         })
         .catch(err => {
           console.log(err);

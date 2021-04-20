@@ -57,16 +57,16 @@ export default {
     },
     created(){
         this.init()
-        console.log("created")
+        console.log("news-list-page created")
     },
     mounted(){
         //监听新闻item的点击事件
         
         $(".news-content").on("click",".news-item",this.handleNewsItem);
-        console.log("mounted")
+        console.log("news-list-page mounted")
     },
     destroyed(){
-        console.log("destroyed")
+        console.log("news-list-page destroyed")
     },
     methods:{
         /**
@@ -141,7 +141,6 @@ export default {
          * 点击加载更多
          */
         handleLoadMore(){
-            console.log("到底了，加载更多")
             let arrLength = this.soccerNewsList.length - 1
             let typeid = this.soccerNewsList[arrLength].type;
             let last_time = this.soccerNewsList[arrLength].sort_timestamp;

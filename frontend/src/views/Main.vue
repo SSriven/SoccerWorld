@@ -2,10 +2,10 @@
   <div class="main">
     <el-container>
       <el-main :style="{height:clientHeight + 'px'}">
-        <Home v-show="currentTab == 1"></Home>
-        <match-data v-show="currentTab == 2"></match-data>
-        <Send v-show="currentTab == 3"></Send>
-        <My v-show="currentTab == 4"></My>
+        <Home v-show="currentTab == 1" v-if="user_id != ''"></Home>
+        <match-data v-show="currentTab == 2" v-if="user_id != ''"></match-data>
+        <Send v-show="currentTab == 3" v-if="user_id != ''"></Send>
+        <My v-show="currentTab == 4" v-if="user_id != ''"></My>
       </el-main>
       <el-footer>
         <el-row :gutter="20">
@@ -54,7 +54,7 @@
 </template>
 
 <script>
-import { mapMutations } from "vuex";
+import { mapMutations ,mapState} from "vuex";
 import Home from "../components/homeView/Home"
 import MatchData from "../components/dataView/MatchData"
 import Send from "../components/sendView/Send"
@@ -64,24 +64,31 @@ export default {
     return {
       main: "欢迎来到足球世界",
       clientHeight: document.body.clientHeight - 60,
-      currentTab: 1
     };
+  },
+  computed:{
+    ...mapState('userStore',{
+      user_id:state=>state.user_id,
+      currentTab:state=>state.currentTab
+    })
   },
   components: {
       Home,MatchData,My,Send
   },
   mounted() {
     //更新最近登陆时间
+    console.log("更新最近登陆时间")
     this.handleLastLoginTime(new Date().getTime());
   },
   methods: {
       clickTab(tab){
-          console.log(tab)
-          this.currentTab = tab;
+          this.handleCurrentTab(tab)
       },
     ...mapMutations("userStore", {
-      handleLastLoginTime: "handleLastLoginTime"
+      handleLastLoginTime: "handleLastLoginTime",
+      handleCurrentTab:"handleCurrentTab"
     })
+    
   }
 };
 </script>

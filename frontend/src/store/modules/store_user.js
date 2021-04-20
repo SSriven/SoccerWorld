@@ -21,7 +21,6 @@ const actions = {
      * 通过userphone获取用户信息
      */
     getUserById:({commit},userphone)=>{
-        console.log("调用action",userphone)
         return new Promise((resolve,reject)=>{
             userData.getUserfindById(userphone).then(res=>{
                 commit('handleUserInfo',res)
@@ -36,7 +35,6 @@ const actions = {
      * 上传用户头像
      */
     uploadUserImg:({commit},obj)=>{
-        console.log("上传用户头像",obj)
         return new Promise((resolve,reject)=>{
             userData.uploadUserImg(obj.imgData).then(res=>{
                 userData.modifyUserThumb(obj.userphone,obj.oldpath,res).then(()=>{
@@ -53,7 +51,6 @@ const actions = {
      * 修改用户性别
      */
     modifySex:({commit},obj)=>{
-        console.log("修改用户性别",obj)
         return new Promise((resolve,reject)=>{
             userData.modifyUserSex(obj.userphone,obj.user_sex).then((res)=>{
                 console.log(res)
@@ -67,11 +64,19 @@ const actions = {
      * 修改用户昵称
      */
     modifyNickName:({commit},obj)=>{
-        console.log("修改用户昵称",obj)
         return new Promise((resolve,reject)=>{
             userData.modifyUserNickName(obj.userphone,obj.nickname).then(res=>{
                 console.log(res)
                 commit('handleUserNickName',obj.nickname)
+                resolve(res)
+            }).catch(err=>reject(err))
+        })
+    },
+
+    findUserHistories:({commit},userphone)=>{
+        return new Promise((resolve,reject)=>{
+            userData.findUserHistories(userphone).then(res=>{
+                commit('handleUserHistoriesAndNews',res)
                 resolve(res)
             }).catch(err=>reject(err))
         })
@@ -101,6 +106,23 @@ const mutations = {
     },
     handleUserNickName:(state,nickname)=>{
         state.user_nickname = nickname
+    },
+    handleUserHistoriesAndNews:(state,res)=>{
+        state.histories = res.history;
+        state.mynews = res.mynews;
+    },
+    handleCurrentTab:(state,tab)=>{
+        state.currentTab = tab;
+    },
+    clearAllData:(state)=>{
+        state.user_id = '';
+        state.sex = '';
+        state.thumb = '';
+        state.user_nickname = '';
+        state.last_login_time = '';
+        state.histories = [];
+        state.mynews = [];
+        state.currentTab = 1;
     }
 }
 const state = {
@@ -109,7 +131,10 @@ const state = {
     last_login_time:''|| localStorage.getItem('last_login_time'),
     user_sex:'',
     user_thumb:'',
-    user_nickname:''
+    user_nickname:'',
+    histories:[],
+    mynews:[],
+    currentTab:1
 }
 // getters 只会依赖 state 中的成员去更新
 const getters = {
@@ -117,7 +142,9 @@ const getters = {
     last_login_time: (state) => state.last_login_time,
     user_sex:(state)=>state.user_sex,
     user_thumb:(state)=>state.user_thumb,
-    user_nickname:(state)=>state.user_nickname
+    user_nickname:(state)=>state.user_nickname,
+    his_number:state=>state.histories.length,
+    mynews_number:state=>state.mynews.length
 }
 
 

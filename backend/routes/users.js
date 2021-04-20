@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const multer = require('multer')
 const UserCon = require('../controller/user')
+const NewsCon = require('../controller/user_history_news')
 const { v4: uuidv4 } = require('uuid');
 const fs = require("fs")
 const path = require('path')
@@ -67,9 +68,10 @@ router.post('/modifyThumb', (req, res, next) => {
   filepath = path.join(__dirname,"../public/uploads/"+oldpath)
   fs.unlink(filepath, function(err){
     if(err){
-     throw err;
+     console.log(err);
+    }else{
+      console.log('文件:'+filepath+'删除成功！');
     }
-    console.log('文件:'+filepath+'删除成功！');
    })
   res.json({res_code:'0'})
 })
@@ -96,6 +98,16 @@ router.post('/modifyNickName',(req,res,next)=>{
     console.log(result)
     res.json({"success":true,"info":result})
   },(err)=>res.json({"success":false,"info":err}))
+})
+
+/**
+ * 查找用户的历史足迹
+ */
+router.get('/findUserHistories',(req,res,next)=>{
+  let userphone = req.query.id;
+  NewsCon.getHistoryNewsById(userphone).then(result=>{
+    res.json(result)
+  })
 })
 
 module.exports = router;

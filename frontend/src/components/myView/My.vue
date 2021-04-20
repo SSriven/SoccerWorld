@@ -56,32 +56,32 @@
         <div class="icon">
           <i class="el-icon-arrow-right"></i>
         </div>
-        <div class="item-value">10篇</div>
+        <div class="item-value">{{mynews_number}}篇</div>
       </div>
       <div class="my-info-item">
         <span class="item-name">历史足迹</span>
         <div class="icon">
           <i class="el-icon-arrow-right"></i>
         </div>
-        <div class="item-value">100篇</div>
+        <div class="item-value">{{his_number}}篇</div>
       </div>
     </section>
     <section class="exit">
-      <el-button type="danger">退出登录</el-button>
+      <el-button type="danger" @click="exitLogin">退出登录</el-button>
     </section>
   </div>
 </template>
 
 <script>
-import { mapActions, mapState } from "vuex";
+import { mapActions, mapState, mapGetters, mapMutations } from "vuex";
 export default {
   name: "my",
   data() {
     return {
       dialogFormVisibleSex: false,
-      dialogFormVisibleName:false,
+      dialogFormVisibleName: false,
       sex: "男",
-      nickName:""
+      nickName: ""
     };
   },
   componenets: {},
@@ -91,7 +91,8 @@ export default {
       user_thumb: state => state.user_thumb,
       user_sex: state => state.user_sex,
       user_nickname: state => state.user_nickname
-    })
+    }),
+    ...mapGetters("userStore", ["his_number", "mynews_number"])
   },
   watch: {
     sex: {
@@ -107,7 +108,11 @@ export default {
     }
   },
   mounted() {
-    this.$store.dispatch("userStore/getUserById", this.user_id);
+    console.log("mounted my vue");
+    this.$store.dispatch("userStore/getUserById", this.user_id).then(res=>{
+      console.log("我的页面查找用户信息",res)
+    });
+    this.findUserHistories(this.user_id);
   },
   methods: {
     /**
@@ -136,20 +141,37 @@ export default {
     /**
      * 修改用户昵称
      */
-    modifyUserNickName(){
-      this.dialogFormVisibleName = false
+    modifyUserNickName() {
+      this.dialogFormVisibleName = false;
       let obj = {
-        userphone:this.user_id,
-        nickname:this.nickName
-      }
-      console.log(obj)
-      this.$store.dispatch("userStore/modifyNickName",obj)
+        userphone: this.user_id,
+        nickname: this.nickName
+      };
+      console.log(obj);
+      this.$store.dispatch("userStore/modifyNickName", obj);
     },
-    ...mapActions("userStore", ["uploadUserImg", "getUserById", "modifySex","modifyNickName"])
+    /**
+     * 退出登录
+     */
+    exitLogin() {
+      localStorage.clear();
+      this.clearAllData();
+      this.$router.push("/login");
+    },
+    ...mapActions("userStore", [
+      "uploadUserImg",
+      "getUserById",
+      "modifySex",
+      "modifyNickName",
+      "findUserHistories"
+    ]),
+    ...mapMutations("userStore", {
+      clearAllData: "clearAllData"
+    })
   }
 };
 </script>
-<style scoped>
+<style lang="less" scoped>
 .my {
   background: #eee;
   height: 100%;

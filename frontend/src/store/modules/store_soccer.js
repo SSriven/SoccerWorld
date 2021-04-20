@@ -40,16 +40,6 @@ const actions = {
                 reject(err)
             })
         })
-        // return soccerData.getMoreSoccerNewsList(typeid,last_time).then((res,err)=>{
-        //     console.log(res)
-        //     return new Promise((resolve,reject)=>{
-        //         if(res){
-        //             commit('loadMoreNewsList',res)
-        //             resolve(res)
-        //         }else
-        //             reject(err)
-        //     })
-        // })
     },
 
     getRecommendNewsList({commit},userid){

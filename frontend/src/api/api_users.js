@@ -62,6 +62,28 @@ export default {
                 resolve(res)
             }).catch(err=>reject(err))
         })
+    },
+
+    /**
+     * 修改用户性别
+     */
+    modifyUserSex:(userphone,user_sex)=>{
+        return new Promise((resolve,reject)=>{
+            request.post(baseUrl + '/modifySex',{id:userphone,user_sex:user_sex}).then(res=>{
+                resolve(res)
+            }).catch(err=>reject(err))
+        })
+    },
+
+    /**
+     * 修改用户昵称
+     */
+    modifyUserNickName:(userphone,nickname)=>{
+        return new Promise((resolve,reject)=>{
+            request.post(baseUrl + '/modifyNickName',{id:userphone,nickname:nickname}).then(res=>{
+                resolve(res)
+            }).catch(err=>reject(err))
+        })
     }
 }
 

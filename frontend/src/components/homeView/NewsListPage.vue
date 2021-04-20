@@ -61,7 +61,7 @@ export default {
     },
     mounted(){
         //监听新闻item的点击事件
-        // $(".news-content").scrollTop(0);
+        
         $(".news-content").on("click",".news-item",this.handleNewsItem);
         console.log("mounted")
     },
@@ -74,6 +74,7 @@ export default {
          */
         init(){
             console.log("初始化 "+this.newsType)
+            $(".news-content").scrollTop(0);
             $(".back-top").hide()
             this.loading = true;
             switch(this.newsType){

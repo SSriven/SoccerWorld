@@ -61,12 +61,9 @@ router.post('/modifyThumb', (req, res, next) => {
   let newpath = req.body.newpath;
   let userphone = req.body.id;
   let oldpath = oldpathArr[oldpathArr.length-1];
-  console.log("oldpath",oldpath)
-  console.log("newpath",newpath)
   UserCon.modifyUserThumb(userphone, newpath, (res) => {
     console.log(res)
   }, (err) => console.log(err))
-  console.log(path.join(__dirname,"../public/uploads/"+oldpath))
   filepath = path.join(__dirname,"../public/uploads/"+oldpath)
   fs.unlink(filepath, function(err){
     if(err){
@@ -75,6 +72,30 @@ router.post('/modifyThumb', (req, res, next) => {
     console.log('文件:'+filepath+'删除成功！');
    })
   res.json({res_code:'0'})
+})
+
+/**
+ * 修改用户性别
+ */
+router.post('/modifySex',(req,res,next)=>{
+  let userphone = req.body.id;
+  let user_sex = req.body.user_sex;
+  UserCon.modifyUserSex(userphone,user_sex,(result)=>{
+    console.log(result)
+    res.json({"success":true,"info":result})
+  },(err)=>res.json({"success":false,"info":err}))
+})
+
+/**
+ * 修改用户昵称
+ */
+router.post('/modifyNickName',(req,res,next)=>{
+  let userphone = req.body.id;
+  let nickname = req.body.nickname;
+  UserCon.modifyUserNickName(userphone,nickname,(result)=>{
+    console.log(result)
+    res.json({"success":true,"info":result})
+  },(err)=>res.json({"success":false,"info":err}))
 })
 
 module.exports = router;

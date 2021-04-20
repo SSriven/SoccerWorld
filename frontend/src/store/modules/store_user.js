@@ -47,6 +47,34 @@ const actions = {
                 reject(err)
             })
         })
+    },
+
+    /**
+     * 修改用户性别
+     */
+    modifySex:({commit},obj)=>{
+        console.log("修改用户性别",obj)
+        return new Promise((resolve,reject)=>{
+            userData.modifyUserSex(obj.userphone,obj.user_sex).then((res)=>{
+                console.log(res)
+                commit('handleUserSex',obj.user_sex)
+                resolve(res)
+            }).catch(err=>reject(err))
+        })
+    },
+
+    /**
+     * 修改用户昵称
+     */
+    modifyNickName:({commit},obj)=>{
+        console.log("修改用户昵称",obj)
+        return new Promise((resolve,reject)=>{
+            userData.modifyUserNickName(obj.userphone,obj.nickname).then(res=>{
+                console.log(res)
+                commit('handleUserNickName',obj.nickname)
+                resolve(res)
+            }).catch(err=>reject(err))
+        })
     }
 }
 const mutations = {
@@ -67,6 +95,12 @@ const mutations = {
     },
     handleUserImg:(state,img)=>{
         state.user_thumb = img
+    },
+    handleUserSex:(state,sex)=>{
+        state.user_sex = sex
+    },
+    handleUserNickName:(state,nickname)=>{
+        state.user_nickname = nickname
     }
 }
 const state = {

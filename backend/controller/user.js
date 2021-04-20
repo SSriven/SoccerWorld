@@ -53,6 +53,27 @@ const UserController = {
                 cberr(err)
             else  cb(res)
         })
+    },
+
+
+    /**
+     * 修改用户头像
+     */
+    modifyUserSex:(userphone,user_sex,cb,cberr)=>{
+        User.updateOne({userphone:userphone},{sex:user_sex},(err,res)=>{
+            if(err) cberr(err)
+            else cb(res)
+        })
+    },
+
+    /**
+     * 修改用户昵称
+     */
+    modifyUserNickName:(userphone,nickname,cb,cberr)=>{
+        User.updateOne({userphone:userphone},{nickname:nickname},(err,res)=>{
+            if(err) cberr(err)
+            else cb(res)
+        })
     }
 }
 

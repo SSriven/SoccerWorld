@@ -19,9 +19,13 @@ import{
     Menu,
     MenuItem,
     Card,
-    Avatar
+    Avatar,
+    Dialog,
+    Radio
 } from 'element-ui'
 
+Vue.use(Dialog)
+Vue.use(Radio)
 Vue.use(Row)
 Vue.use(Col)
 Vue.use(Form)

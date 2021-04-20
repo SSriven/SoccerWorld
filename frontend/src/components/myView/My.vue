@@ -24,21 +24,31 @@
           />
         </div>
       </div>
-      <div class="my-info-item">
+      <div class="my-info-item" @click="dialogFormVisibleSex = true">
         <span class="item-name">性别</span>
         <div class="icon">
           <i class="el-icon-arrow-right"></i>
         </div>
         <div class="item-value">{{user_sex}}</div>
       </div>
-      <div class="my-info-item">
-        <span class="item-name">修改用户名</span>
+      <el-dialog title="选择性别" :visible.sync="dialogFormVisibleSex">
+        <el-radio v-model="sex" label="男">男</el-radio>
+        <el-radio v-model="sex" label="女">女</el-radio>
+      </el-dialog>
+      <div class="my-info-item" @click="dialogFormVisibleName = true">
+        <span class="item-name">昵称</span>
         <div class="icon">
           <i class="el-icon-arrow-right"></i>
         </div>
         <div class="item-value">{{user_nickname}}</div>
       </div>
-      <!-- <el-input type="file" accept="image/*"></el-input> -->
+      <el-dialog title="修改昵称" :visible.sync="dialogFormVisibleName">
+        <el-input v-model="nickName" autocomplete="off"></el-input>
+        <div slot="footer" class="dialog-footer">
+          <el-button @click="dialogFormVisibleName = false">取 消</el-button>
+          <el-button type="primary" @click="modifyUserNickName">确 定</el-button>
+        </div>
+      </el-dialog>
     </section>
     <section class="my-info">
       <div class="my-info-item">
@@ -67,7 +77,12 @@ import { mapActions, mapState } from "vuex";
 export default {
   name: "my",
   data() {
-    return {};
+    return {
+      dialogFormVisibleSex: false,
+      dialogFormVisibleName:false,
+      sex: "男",
+      nickName:""
+    };
   },
   componenets: {},
   computed: {
@@ -78,13 +93,32 @@ export default {
       user_nickname: state => state.user_nickname
     })
   },
+  watch: {
+    sex: {
+      handler(n) {
+        this.sex = n;
+        console.log(n);
+        let obj = {
+          userphone: this.user_id,
+          user_sex: n
+        };
+        this.$store.dispatch("userStore/modifySex", obj);
+      }
+    }
+  },
   mounted() {
-    this.$store.dispatch("userStore/getUserById", this.user_id)
+    this.$store.dispatch("userStore/getUserById", this.user_id);
   },
   methods: {
+    /**
+     * 选择文件
+     */
     selectFile() {
       document.getElementById("firmware").click();
     },
+    /**
+     * 修改用户头像
+     */
     selected() {
       let fileData = this.$refs.up_avatar.files[0];
       // 使用FormData打包
@@ -93,13 +127,25 @@ export default {
       let obj = {
         userphone: this.user_id,
         imgData: formData,
-        oldpath:this.user_thumb
+        oldpath: this.user_thumb
       };
       this.$store.dispatch("userStore/uploadUserImg", obj).then(res => {
         console.log(res);
       });
     },
-    ...mapActions("userStore", ["uploadUserImg", "getUserById"])
+    /**
+     * 修改用户昵称
+     */
+    modifyUserNickName(){
+      this.dialogFormVisibleName = false
+      let obj = {
+        userphone:this.user_id,
+        nickname:this.nickName
+      }
+      console.log(obj)
+      this.$store.dispatch("userStore/modifyNickName",obj)
+    },
+    ...mapActions("userStore", ["uploadUserImg", "getUserById", "modifySex","modifyNickName"])
   }
 };
 </script>
@@ -147,5 +193,8 @@ header {
   float: right;
   margin-left: 10px;
   color: #999;
+}
+/deep/.el-dialog {
+  width: 80%;
 }
 </style>

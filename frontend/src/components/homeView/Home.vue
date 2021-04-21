@@ -80,9 +80,12 @@ export default {
   }
 };
 </script>
-<style scoped>
+<style lang="less" scoped>
 .home-container {
   height: 100%;
+}
+section{
+  height: ~"calc(100% - 60px)";
 }
 .el-menu-item{
     padding:0;

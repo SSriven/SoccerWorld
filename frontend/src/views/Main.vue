@@ -93,7 +93,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="less" scoped>
 .main {
   position: relative;
   height: 100%;
@@ -104,6 +104,7 @@ export default {
   top: 0;
   width: 100%;
   overflow: unset;
+  height: ~"calc(100% - 60px)";
 }
 .el-footer {
   padding: 0 !important;

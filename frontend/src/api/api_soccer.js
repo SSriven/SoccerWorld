@@ -69,6 +69,22 @@ export default {
                 reject(err)
             })
         })
+    },
+
+    /**
+     * 添加一条评论
+     * @param {*} newsid 
+     * @param {*} commentobj 
+     */
+    addComment(newsid,commentobj){
+        console.log("添加评论",newsid,commentobj);
+        return new Promise((resolve,reject)=>{
+            request.post(baseUrl + "/addComment",{newsid:newsid,commentobj:commentobj}).then(res=>{
+                resolve(res)
+            }).catch(err=>{
+                reject(err)
+            })
+        })
     }
 }
 

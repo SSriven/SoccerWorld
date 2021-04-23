@@ -5,7 +5,7 @@
         <Home v-show="currentTab == 1" v-if="user_id != ''"></Home>
         <match-data v-show="currentTab == 2" v-if="user_id != ''"></match-data>
         <Send v-show="currentTab == 3" v-if="user_id != ''"></Send>
-        <My v-show="currentTab == 4" v-if="user_id != ''"></My>
+        <My v-if="currentTab == 4 && user_id != ''"></My>
       </el-main>
       <el-footer>
         <el-row :gutter="20">
@@ -78,6 +78,7 @@ export default {
   mounted() {
     //更新最近登陆时间
     console.log("更新最近登陆时间")
+    this.$store.dispatch("userStore/getUserById", this.user_id)
     this.handleLastLoginTime(new Date().getTime());
   },
   methods: {

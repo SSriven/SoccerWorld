@@ -1,11 +1,11 @@
 <template>
-  <div class="news-detail" :style="{height:clientHeight + 'px'}" v-loading="loading">
+  <div class="news-detail" :style="{height:clientHeight + 'px'}">
     <header>
       <i class="el-icon-arrow-left back" @click="backHome"></i>
       <span class="app-name">足球天下</span>
-      <div class="comment-number">999+评论</div>
+      <div class="comment-number">{{comment.length}}评论</div>
     </header>
-    <section :style="{height:(clientHeight-80) + 'px'}">
+    <section :style="{height:(clientHeight-80) + 'px'}" v-loading="loading">
       <article>
         <p class="title">{{page.title}}</p>
         <p class="author">{{page.author}}</p>
@@ -17,40 +17,53 @@
           <span class="reply-head-title">精彩评论</span>
         </p>
         <div class="reply-content">
-          <div class="reply-content-item" v-for="i in [1,2,3,4,5]" :key="i">
+          <div class="reply-content-item" v-for="(item,index) in comment" :key="index">
             <div class="reply-content-item-header">
               <div class="reply-content-item-header-left">
                 <img
-                  src="http://192.168.0.10:3000/uploads/file-ee09c33608054894b362e539c9f23824.png"
+                  :src="item.user_thumb"
                 />
               </div>
               <div class="reply-content-item-header-right">
-                <p class="comment-people">绝对忠告</p>
-                <p class="comment-time">2021-04-21 14:18:36</p>
+                <p class="comment-people">{{item.user_nickname}}</p>
+                <p class="comment-time">{{item.reply_time}}</p>
               </div>
             </div>
-            <div class="reply-content-item-comment">2020印象最深的是两回合踢国安</div>
+            <div class="reply-content-item-comment">{{item.content}}</div>
           </div>
         </div>
       </div>
     </section>
     <div class="send-comment">
-      <input type="text" placeholder="请发表你的言论" />
-      <el-button type="primary">发表</el-button>
+      <input type="text" v-model="replyContent" placeholder="请发表你的言论" />
+      <el-button type="primary" @click="sendComment()">发表</el-button>
     </div>
   </div>
 </template>
 
 <script>
 import detailData from "../api/api_soccer";
+import { mapState } from "vuex";
+import Vue from "vue";
+import { Message } from "element-ui";
+Vue.prototype.$message = Message;
 export default {
   name: "NewsDetail",
   data() {
     return {
       clientHeight: document.body.clientHeight,
-      page: {},
-      loading: true
+      page: {}, //详情页信息
+      comment: [], //评论
+      loading: true,
+      replyContent: ""
     };
+  },
+  computed: {
+    ...mapState("userStore", {
+      user_id: state => state.user_id,
+      user_thumb: state => state.user_thumb,
+      user_nickname: state => state.user_nickname
+    })
   },
   created() {
     console.log("created newsdatail");
@@ -64,6 +77,7 @@ export default {
       .then(res => {
         console.log(res);
         this.page = res;
+        this.comment = res.comment;
         this.loading = false;
       })
       .catch(err => {
@@ -73,6 +87,44 @@ export default {
   methods: {
     backHome() {
       this.$router.go(-1);
+    },
+    sendComment() {
+      if(this.replyContent == ""){
+        this.$message("请发表你的评论！");
+        return false;
+      }
+      var formatDateTime = function(date) {
+        var y = date.getFullYear();
+        var m = date.getMonth() + 1;
+        m = m < 10 ? "0" + m : m;
+        var d = date.getDate();
+        d = d < 10 ? "0" + d : d;
+        var h = date.getHours();
+        h = h < 10 ? "0" + h : h;
+        var minute = date.getMinutes();
+        minute = minute < 10 ? "0" + minute : minute;
+        var second = date.getSeconds();
+        second = second < 10 ? "0" + second : second;
+        return y + "-" + m + "-" + d + " " + h + ":" + minute + ":" + second;
+      };
+      let commentobj = {
+        user_id: this.user_id,
+        user_thumb: this.user_thumb,
+        user_nickname: this.user_nickname,
+        news_id: this.page.page_id,
+        content: this.replyContent,
+        reply_time: formatDateTime(new Date())
+      };
+      detailData.addComment(this.page.page_id,commentobj).then(res=>{
+        console.log(res)
+        this.$message("发表成功");
+        this.comment.push(commentobj)
+        this.replyContent = ""
+      }).catch(err=>{
+        console.log(err)
+        this.$message("网络繁忙，请稍后再试");
+        this.replyContent = ""
+      });
     }
   }
 };
@@ -119,19 +171,19 @@ section {
   font-size: 18px;
   font-weight: 600;
 }
-.comment-number{
+.comment-number {
   margin-right: 10px;
-    position: absolute;
-    right: 10px;
-    top: 10px;
-    font-size: 13px;
-    color: #379af4;
-    border: 1px solid #379af4;
-    box-sizing: border-box;
-    height: 20px;
-    line-height: 20px;
-    border-radius: 2px;
-    padding: 0 10px;
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  font-size: 13px;
+  color: #379af4;
+  border: 1px solid #379af4;
+  box-sizing: border-box;
+  height: 20px;
+  line-height: 20px;
+  border-radius: 2px;
+  padding: 0 10px;
 }
 article {
   overflow: scroll;
@@ -181,8 +233,6 @@ article {
   font-size: 14px;
   margin-left: 10px;
   font-weight: bold;
-}
-.reply-content {
 }
 .reply-content-item {
   border-bottom: 1px solid #eee;

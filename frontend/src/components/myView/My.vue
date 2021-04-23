@@ -112,7 +112,9 @@ export default {
     this.$store.dispatch("userStore/getUserById", this.user_id).then(res=>{
       console.log("我的页面查找用户信息",res)
     });
-    this.findUserHistories(this.user_id);
+    this.findUserHistories(this.user_id).then(res=>{
+      console.log("我的历史记录",res)
+    });
   },
   methods: {
     /**

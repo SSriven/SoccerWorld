@@ -82,14 +82,14 @@ router.get('/detail', function (req, res, next) {
     if (!newsdetailobj) {   //2.数据库中没有数据，则去第三方网站爬取数据
       let urlstr = baseDetailUrl + pageid + '/' + typeid;
       request(urlstr, (error, response, body) => {
-        console.log(urlstr,"数据库中没有数据，则去第三方网站爬取数据")
+        console.log(urlstr, "数据库中没有数据，则去第三方网站爬取数据")
         let data = JSON.parse(body);
         if (error) {
           console.log(error)
           res.send({ "data": [] })
         } else {
           //3.将爬取到的数据放入数据库中
-          NewsDetailCon.addOneNewsDetail(data,(res)=>console.log("将爬取到的数据放入数据库中"))
+          NewsDetailCon.addOneNewsDetail(data, (res) => console.log("将爬取到的数据放入数据库中"))
           //4.添加一条历史记录
           // addHistory(userphone,data)
           res.send(data)
@@ -106,6 +106,20 @@ router.get('/detail', function (req, res, next) {
 
 })
 
+/**
+ * 增加一条评论
+ */
+router.post("/addComment", (req, res, next) => {
+  let newsid = req.body.newsid;
+  let commentobj = req.body.commentobj;
+  console.log(newsid,commentobj)
+  NewsDetailCon.addOneNewsComment(newsid, commentobj).then(result => {
+    res.json(result)
+  }).catch(err=>{
+    res.status(500).json(err)
+  })
+})
+
 var formatDateTime = function (date) {
   var y = date.getFullYear();
   var m = date.getMonth() + 1;
@@ -113,30 +127,30 @@ var formatDateTime = function (date) {
   var d = date.getDate();
   d = d < 10 ? ('0' + d) : d;
   var h = date.getHours();
-  h=h < 10 ? ('0' + h) : h;
+  h = h < 10 ? ('0' + h) : h;
   var minute = date.getMinutes();
   minute = minute < 10 ? ('0' + minute) : minute;
-  var second=date.getSeconds();
-  second=second < 10 ? ('0' + second) : second;
-  return y + '-' + m + '-' + d+' '+h+':'+minute+':'+second;
+  var second = date.getSeconds();
+  second = second < 10 ? ('0' + second) : second;
+  return y + '-' + m + '-' + d + ' ' + h + ':' + minute + ':' + second;
 };
 /**
  * 添加历史记录
  */
-router.post("/addHistory",(req,res)=>{
+router.post("/addHistory", (req, res) => {
   let userphone = req.body.params.userphone
   let newsobj = req.body.params.newsobj
   newsobj["see_time"] = formatDateTime(new Date())
-  addHistory(userphone,newsobj)
+  addHistory(userphone, newsobj)
 })
 
 
 
 
-function addHistory(userphone,newsobj){
-  NewsHistoryCon.getHistoryNewsById(userphone).then(()=>{
-    NewsHistoryCon.addOneHistoryNews(userphone,newsobj).then(res=>{
-      console.log("添加一条历史记录",res)
+function addHistory(userphone, newsobj) {
+  NewsHistoryCon.getHistoryNewsById(userphone).then(() => {
+    NewsHistoryCon.addOneHistoryNews(userphone, newsobj).then(res => {
+      console.log("添加一条历史记录", res)
     })
   })
 }

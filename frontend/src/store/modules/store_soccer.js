@@ -3,6 +3,7 @@
  */
 
 import soccerData from "../../api/api_soccer.js"
+import userData from "../../api/api_users"
 
 const actions = {
     /**
@@ -42,9 +43,35 @@ const actions = {
         })
     },
 
+    /**
+     * 获取第一页用户动态
+     * @param {*} param0 
+     */
+    getUserNewsList({commit}){
+        return new Promise((resolve,reject)=>{
+            userData.getAllUserNewsList().then(res=>{
+                commit("handleUserNewsList",res)
+                resolve(res)
+            }).catch(err=>reject(err))
+        })
+    },
+
+    /**
+     * 获取下一页动态
+     */
+    getNextUserNewsList:({commit},lasttime)=>{
+        return new Promise((resolve,reject)=>{
+            userData.getNextUserNewsList(lasttime).then(res=>{
+                commit("loadMoreUserNewsList",res)
+                resolve(res)
+            }).catch(err=>reject(err))
+        })
+    },
+
+
     getRecommendNewsList({commit},userid){
         console.log(userid)
-        commit('handleSoccerNewsList',[])
+        commit('handleRecommendNewsList',[])
     }
 }
 const mutations = {
@@ -61,17 +88,27 @@ const mutations = {
 
     loadMoreNewsList:(state, moreNewsList)=>{
         state.soccerNewsList = state.soccerNewsList.concat(moreNewsList)
+    },
+
+    handleUserNewsList:(state,usernewslist)=>{
+        state.usernewsList = usernewslist
+    },
+
+    loadMoreUserNewsList:(state,moreusernewslist)=>{
+        state.usernewsList = state.usernewsList.concat(moreusernewslist)
     }
 }
 const state = {
     recommendNewsList:[],//推荐新闻
     soccerNewsList:[],    //足球新闻
+    usernewsList:[],     //用户动态
 
 }
 // getters 只会依赖 state 中的成员去更新
 const getters = {
     recommendNewsList: (state) => state.recommendNewsList,
-    soccerNewsList: (state) => state.soccerNewsList
+    soccerNewsList: (state) => state.soccerNewsList,
+    usernewsList:(state)=>state.usernewsList
 }
 
 

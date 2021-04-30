@@ -1,7 +1,7 @@
 import request from '../http/request.js'
 
 
-const ip = "192.168.0.10:3000"
+const ip = "192.168.0.12:3000"
 
 const baseUrl = 'http://'+ip+'/users';
 
@@ -90,6 +90,50 @@ export default {
     findUserHistories:(userphone)=>{
         return new Promise((resolve,reject)=>{
             request.get(baseUrl + "/findUserHistories",{params:{id:userphone}}).then(res=>{
+                resolve(res)
+            }).catch(err=>reject(err))
+        })
+    },
+
+    /**
+     * 获取用户动态
+     */
+    getAllUserNewsList:()=>{
+        return new Promise((resolve,reject)=>{
+            request.get(baseUrl + "/getUserNewsList").then(res=>{
+                resolve(res)
+            }).catch(err=>reject(err))
+        })
+    },
+
+    /**
+     * 获取下一页动态
+     */
+    getNextUserNewsList:(lasttime)=>{
+        return new Promise((resolve,reject)=>{
+            request.get(baseUrl + "/getNewsUserNewsList",{params:{lasttime:lasttime}}).then(res=>{
+                resolve(res)
+            }).catch(err=>reject(err))
+        })
+    },
+
+    /**
+     * 增加一条用户动态
+     */
+    addOneUserNews:(userNewsObj)=>{
+        return new Promise((resolve,reject)=>{
+            request.post(baseUrl + "/addOneUserNews",{usernewsobj:userNewsObj}).then(res=>{
+                resolve(res)
+            }).catch(err=>reject(err))
+        })
+    },
+
+    /**
+     * 增加阅读量
+     */
+    addReadNum:(news_id)=>{
+        return new Promise((resolve,reject)=>{
+            request.get(baseUrl + "/addReadNum",{params:{news_id:news_id}}).then(res=>{
                 resolve(res)
             }).catch(err=>reject(err))
         })

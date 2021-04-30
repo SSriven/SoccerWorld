@@ -16,6 +16,11 @@
           </el-col>
           <el-col :span="4">
             <div class="grid-content bg-purple">
+                <el-menu-item index="9">世界</el-menu-item>
+            </div>
+          </el-col>
+          <el-col :span="4">
+            <div class="grid-content bg-purple">
                 <el-menu-item index="1">快讯</el-menu-item>
             </div>
           </el-col>

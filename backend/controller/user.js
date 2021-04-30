@@ -57,7 +57,7 @@ const UserController = {
 
 
     /**
-     * 修改用户头像
+     * 修改用户性别
      */
     modifyUserSex:(userphone,user_sex,cb,cberr)=>{
         User.updateOne({userphone:userphone},{sex:user_sex},(err,res)=>{

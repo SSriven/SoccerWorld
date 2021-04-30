@@ -44,9 +44,9 @@
 </template>
 
 <script>
+import { mapMutations, mapActions } from "vuex";
 import Vue from "vue";
 import { Message } from "element-ui";
-import { mapMutations, mapActions } from "vuex";
 Vue.prototype.$message = Message;
 export default {
   name: "Login",

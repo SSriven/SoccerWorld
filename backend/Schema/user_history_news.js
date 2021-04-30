@@ -10,5 +10,5 @@ var NewsSchema = new Schema({
     mynews:[]
 });
 
-//暴露出去的方法
+
 module.exports = NewsSchema

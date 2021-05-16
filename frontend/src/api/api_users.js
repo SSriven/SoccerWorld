@@ -1,7 +1,7 @@
 import request from '../http/request.js'
 
 
-const ip = "192.168.0.12:3000"
+const ip = "192.168.9.96:3000"
 
 const baseUrl = 'http://'+ip+'/users';
 

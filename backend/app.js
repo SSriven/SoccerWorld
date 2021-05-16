@@ -21,7 +21,8 @@ db.on('error', function(){
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
-var spainRouter = require('./routes/soccer');//西甲路由
+var spainRouter = require('./routes/soccer');
+var soccerData = require('./routes/soccer_data');
 
 var app = express();
 
@@ -52,6 +53,7 @@ app.all('*', function(req, res, next) {
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/soccer',spainRouter);
+app.use('/data',soccerData);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

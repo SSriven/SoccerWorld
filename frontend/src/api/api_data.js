@@ -46,7 +46,7 @@ export default {
     },
 
     /**
-     * 
+     * 赛程
      */
     getScheduleData(season_id, gameweek = undefined) {
         return new Promise((resolve, reject) => {

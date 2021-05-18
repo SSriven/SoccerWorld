@@ -24,7 +24,7 @@ export default {
     data(){
         return{
             currentTab:'西甲',
-            currentSeasonId:"",
+            currentSeasonId:0,
             sectionHeight:document.body.clientHeight - 120,
         }
     },
@@ -35,9 +35,7 @@ export default {
     },
     mounted(){
         this.getAllMatchesSeasonId().then(res=>{
-            console.log(res)
-            this.currentSeasonId = res[2].season_id
-            console.log(this.currentSeasonId)
+            res.forEach(ele=> ele.label == this.currentTab ? this.currentSeasonId = ele.season_id : 0)
         })
     },
     components:{
@@ -52,7 +50,6 @@ export default {
                     return true;
                 }
             })
-            console.log(this.currentSeasonId)
         },
         ...mapActions("matchesStore",[
             "getAllMatchesSeasonId"

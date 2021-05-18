@@ -1,8 +1,8 @@
 <template>
-  <div class="news-detail" :style="{height:clientHeight + 'px'}">
+  <div class="mynews-detail" :style="{height:clientHeight + 'px'}">
     <header>
       <i class="el-icon-arrow-left back" @click="backHome"></i>
-      <span class="app-name">足球天下</span>
+      <span class="app-name">我的发表</span>
       <div class="comment-number">{{page.read_num}}阅读量</div>
     </header>
     <section :style="{height:(clientHeight-80) + 'px'}">
@@ -16,10 +16,9 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
-import userData from "../api/api_users"
+import userData from "../../api/api_users"
 export default {
-  name: "userNewsDetail",
+  name: "myNewsDetail",
   data() {
     return {
       clientHeight: document.body.clientHeight,
@@ -27,18 +26,15 @@ export default {
     };
   },
   computed: {
-    ...mapState("soccerStore", {
-      usernewsList: state => state.usernewsList
-    })
+    
   },
   created() {},
   mounted() {
     let news_id = this.$route.query.news_id;
-    let index = this.$route.query.index;
-    console.log("userNewsDetail")
-    this.page = this.usernewsList[index]
-    userData.addReadNum(news_id).then(res=>{
-        console.log(res)
+    console.log(this.$router)
+    userData.getNewsById(news_id).then(res=>{
+        console.log(res[0])
+        this.page = res[0];
     })
   },
   methods: {
@@ -50,7 +46,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.news-detail {
+.mynews-detail {
   position: relative;
   background: #fefefe;
 }

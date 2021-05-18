@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const request = require('request')
+const moment = require('moment')
 
 
 const seasonUrl = "https://www.dongqiudi.com/api/v2/config/data_menu";//获取赛季id
@@ -117,14 +118,16 @@ router.get('/schedule', (req, res, next) => {
     }, (err, response, body) => {
         if (!err && response.statusCode == 200) {
             body = JSON.parse(body)
+            res.json(body)
             let rounds = body.content.rounds;
             let length = rounds.length;
             if (!gameweek) {
                 let matchesArr = []
                 let matches = body.content.matches;
                 matches.forEach(ele=>{
+                    let formatDate = moment(ele.start_play).add(8,'hours').format('YYYY-MM-DD HH:mm:ss')
                     let obj = {
-                        start_time: ele.start_time,
+                        start_play: formatDate,
                         team_A_name: ele.team_A_name,
                         team_A_logo: ele.team_A_logo,
                         fs_A: ele.fs_A,
@@ -136,7 +139,7 @@ router.get('/schedule', (req, res, next) => {
                     matchesArr.push(obj)
                 })
                 
-                res.json(matchesArr)
+                // res.json(matchesArr)
             } else {
                 gameweek = gameweek > length ? length : gameweek;
                 let matchurl = rounds[gameweek - 1].url
@@ -145,8 +148,10 @@ router.get('/schedule', (req, res, next) => {
                     let matchesArr = []
                     let matches = body.content.matches;
                     matches.forEach(ele=>{
+                        let formatDate = moment(ele.start_play).add(8,'hours').format('YYYY-MM-DD HH:mm:ss')
+                        // formatDate = formatDate.setHours(formatDate.getHours()+8)
                         let obj = {
-                            start_time: ele.start_time,
+                            start_play: formatDate,
                             team_A_name: ele.team_A_name,
                             team_A_logo: ele.team_A_logo,
                             fs_A: ele.fs_A,

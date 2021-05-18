@@ -25,6 +25,17 @@ const UserNewsController = {
     },
 
     /**
+     * 根据id查询用户动态
+     */
+    getUserNewsById:(news_id)=>{
+        return new Promise((resolve,reject)=>{
+            UserNews.find({news_id:news_id}).then(res=>{
+                resolve(res)
+            }).catch(err=>reject(err))
+        })
+    },
+
+    /**
      * 增加一条用户动态
      */
     addOneUserNews: (usernewsobj) => {

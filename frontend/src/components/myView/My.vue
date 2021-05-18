@@ -51,14 +51,14 @@
       </el-dialog>
     </section>
     <section class="my-info">
-      <div class="my-info-item">
+      <div class="my-info-item" @click="selectMySend">
         <span class="item-name">我的发表</span>
         <div class="icon">
           <i class="el-icon-arrow-right"></i>
         </div>
         <div class="item-value">{{mynews_number}}篇</div>
       </div>
-      <div class="my-info-item">
+      <div class="my-info-item"  @click="selectMyHistories">
         <span class="item-name">历史足迹</span>
         <div class="icon">
           <i class="el-icon-arrow-right"></i>
@@ -151,6 +151,18 @@ export default {
       };
       console.log(obj);
       this.$store.dispatch("userStore/modifyNickName", obj);
+    },
+    /**
+     * 进入历史足迹
+     */
+    selectMyHistories(){
+      this.$router.push("/myhistories" );
+    },
+    /**
+     * 进入我的发表
+     */
+    selectMySend(){
+      this.$router.push("/mynews" );
     },
     /**
      * 退出登录

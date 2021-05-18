@@ -13,6 +13,11 @@
             <span class="box-card-footer-read">阅读量{{item.read_num}}</span>
         </div>
       </el-card>
+      <div v-if="usernewsList.length > 0" class="load-more" @click="handleLoadMoreUserNews">点击加载更多</div>
+      <div v-else class="no-more">没有更多了</div>
+      <div class="back-top" @click="handleBackTop">
+        <i class="el-icon-top"></i>
+      </div>
     </div>
     <div v-else>
       <el-row
@@ -82,7 +87,7 @@ export default {
   },
   mounted() {
     //监听新闻item的点击事件
-
+    $(".back-top").fadeIn();
     $(".news-content").on("click", ".news-item", this.handleNewsItem);
     $(".news-content").on("click", ".box-card", this.handleUserNewsItem);
     console.log("news-list-page mounted");
@@ -209,7 +214,15 @@ export default {
       else {
         $(".back-top").fadeOut("slow");
       }
-      if (offsettop - divHeight <= 0) this.handleLoadMore();
+      if (offsettop - divHeight <= 0){
+        if(this.newsType == '0'){
+          console.log("推荐")
+        }else if(this.newsType == '9'){
+          this.handleLoadMoreUserNews();
+        }else{
+          this.handleLoadMore();
+        }
+      } 
     },
     /**
      * 点击加载更多
@@ -224,6 +237,14 @@ export default {
       };
       console.log(typeid, last_time);
       this.getMoreSoccerNewsList(obj);
+    },
+    /**
+     * 点击加载更多用户动态
+     */
+    handleLoadMoreUserNews(){
+      let arrLength = this.usernewsList.length - 1;
+      let last_time = this.usernewsList[arrLength].sort_time;
+      this.getNextUserNewsList(last_time);
     },
     /**
      * 回到顶部
@@ -251,7 +272,8 @@ export default {
       "getSoccerNewsList",
       "getMoreSoccerNewsList",
       "getRecommendNewsList",
-      "getUserNewsList"
+      "getUserNewsList",
+      "getNextUserNewsList"
     ])
   }
 };
@@ -334,7 +356,7 @@ time {
   line-height: 30px;
 }
 .user_info img {
-  display: inline-block;
+  display: block;
   float: left;
   width: 30px;
   height: 30px;
@@ -349,6 +371,7 @@ time {
 .box-card-title {
   clear: both;
   font-weight: 600;
+  font-size: 14px;
 }
 .send-time{
     float: left;

@@ -108,7 +108,7 @@ const mutations = {
         state.user_nickname = nickname
     },
     handleUserHistoriesAndNews:(state,res)=>{
-        state.histories = res.history;
+        state.histories = res.history.reverse();
         state.mynews = res.mynews;
     },
     handleCurrentTab:(state,tab)=>{

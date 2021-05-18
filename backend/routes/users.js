@@ -150,6 +150,16 @@ router.post('/addOneUserNews',(req,res,next)=>{
 })
 
 /**
+ * 根据id查询用户动态
+ */
+router.get('/getUserNewsById',(req,res,next)=>{
+  let news_id = req.query.news_id;
+  UserNewsCon.getUserNewsById(news_id).then(result=>{
+    res.json(result)
+  }).catch(err=>res.json(err))
+})
+
+/**
  * 增加阅读量
  */
 router.get('/addReadNum',(req,res,next)=>{

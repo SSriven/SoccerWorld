@@ -4,6 +4,9 @@ import Main from '../views/Main.vue'
 import Login from '../views/Login.vue'
 import NewsDetail from '../views/NewsDetail'
 import UserNewsDetail from '../views/UserNewsDetail'
+import MyHistories from "../components/myView/myHistories"
+import MySend from "../components/myView/mySend"
+import MysendDetail from "../components/myView/myNewsDetail"
 
 
 Vue.use(VueRouter);
@@ -46,6 +49,21 @@ const routes = [
     path:'/userNewsDetail',
     name:'userNewsDetail',
     component:UserNewsDetail
+  },
+  {
+    path:"/myhistories",
+    name:'myhistories',
+    component:MyHistories
+  },
+  {
+    path:"/mynews",
+    name:'mynews',
+    component:MySend
+  },
+  {
+    path:'/mynewsdetail',
+    name:'mynewsdetail',
+    component:MysendDetail
   }
 ];
 

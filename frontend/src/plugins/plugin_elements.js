@@ -21,9 +21,13 @@ import{
     Card,
     Avatar,
     Dialog,
-    Radio
+    Radio,
+    Table,
+    TableColumn
 } from 'element-ui'
 
+Vue.use(Table)
+Vue.use(TableColumn)
 Vue.use(Dialog)
 Vue.use(Radio)
 Vue.use(Row)

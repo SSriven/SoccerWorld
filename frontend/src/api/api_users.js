@@ -111,7 +111,7 @@ export default {
      */
     getNextUserNewsList:(lasttime)=>{
         return new Promise((resolve,reject)=>{
-            request.get(baseUrl + "/getNewsUserNewsList",{params:{lasttime:lasttime}}).then(res=>{
+            request.get(baseUrl + "/getNextUserNewsList",{params:{lasttime:lasttime}}).then(res=>{
                 resolve(res)
             }).catch(err=>reject(err))
         })
@@ -136,6 +136,15 @@ export default {
             request.get(baseUrl + "/addReadNum",{params:{news_id:news_id}}).then(res=>{
                 resolve(res)
             }).catch(err=>reject(err))
+        })
+    },
+
+    /**
+     * 根据id查询用户动态
+     */
+    getNewsById:(news_id)=>{
+        return new Promise((resolve,reject)=>{
+            request.get(baseUrl+"/getUserNewsById",{params:{news_id:news_id}}).then(res=>resolve(res)).catch(err=>reject(err))
         })
     }
 }

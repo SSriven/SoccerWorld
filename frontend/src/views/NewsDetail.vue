@@ -146,7 +146,6 @@ header {
   z-index: 999;
 }
 section {
-  position: relative;
   top: 40px;
   position: relative;
   top: 40px;
@@ -222,7 +221,7 @@ article {
 }
 .reply .reply-head .tiao {
   background: #379af4;
-  display: inline-block;
+  display: block;
   width: 5px;
   height: 16px;
   float: left;

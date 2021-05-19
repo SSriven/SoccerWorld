@@ -48,7 +48,7 @@ export default {
     /**
      * 赛程
      */
-    getScheduleData(season_id, gameweek = undefined) {
+    getScheduleData(season_id, gameweek) {
         return new Promise((resolve, reject) => {
             request.get(baseUrl + '/schedule', { params: { season_id: season_id, gameweek: gameweek } }).then(res => resolve(res)).catch(err => reject(err))
         })

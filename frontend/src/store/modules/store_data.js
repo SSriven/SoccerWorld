@@ -29,6 +29,9 @@ const actions = {
         })
     },
 
+    /**
+     * 进球榜
+     */
     getPersonGoalsRanking:({commit},season_id)=>{
         return new Promise((resolve,reject)=>{
             matchesData.getPersonRankingGoals(season_id).then(res=>{
@@ -38,10 +41,25 @@ const actions = {
         })
     },
 
+    /**
+     * 助攻榜
+     */
     getPersonAssistRanking:({commit},season_id)=>{
         return new Promise((resolve,reject)=>{
             matchesData.getPersonRankingAssist(season_id).then(res=>{
                 commit('handlePersonAssistRanking',res)
+                resolve(res)
+            }).catch(err=>reject(err))
+        })
+    },
+
+    /**
+     * 赛程
+     */
+    getMatchesSchedule:({commit},obj)=>{
+        return new Promise((resolve,reject)=>{
+            matchesData.getScheduleData(obj.season_id,obj.gameweek).then(res=>{
+                commit('handleMatchesSchedule',res)
                 resolve(res)
             }).catch(err=>reject(err))
         })
@@ -63,6 +81,10 @@ const mutations = {
 
     handlePersonAssistRanking:(state,data)=>{
         state.personAssistRankingArr = data
+    },
+
+    handleMatchesSchedule:(state,data)=>{
+        state.matchesScheduleData = data;
     }
 
   
@@ -72,6 +94,7 @@ const state = {
    standingData:{},//积分榜
    personGoalsRankingArr:[],//进球榜
    personAssistRankingArr:[],//助攻榜
+   matchesScheduleData:{},//赛程
 
 }
 // getters 只会依赖 state 中的成员去更新

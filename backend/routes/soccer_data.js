@@ -118,14 +118,14 @@ router.get('/schedule', (req, res, next) => {
     }, (err, response, body) => {
         if (!err && response.statusCode == 200) {
             body = JSON.parse(body)
-            res.json(body)
+            // res.json(body)
             let rounds = body.content.rounds;
             let length = rounds.length;
             if (!gameweek) {
                 let matchesArr = []
                 let matches = body.content.matches;
                 matches.forEach(ele=>{
-                    let formatDate = moment(ele.start_play).add(8,'hours').format('YYYY-MM-DD HH:mm:ss')
+                    let formatDate = moment(ele.start_play).add(8,'hours').format('YYYY-MM-DD HH:mm')
                     let obj = {
                         start_play: formatDate,
                         team_A_name: ele.team_A_name,
@@ -134,21 +134,26 @@ router.get('/schedule', (req, res, next) => {
                         fs_B: ele.fs_B,
                         team_B_logo: ele.team_B_logo,
                         team_B_name: ele.team_B_name,
-                        status: ele.status
+                        status: ele.status,
+                        gameweek_total:length
                     } 
                     matchesArr.push(obj)
                 })
                 
-                // res.json(matchesArr)
+                res.json(matchesArr)
             } else {
                 gameweek = gameweek > length ? length : gameweek;
                 let matchurl = rounds[gameweek - 1].url
                 request(matchurl, (errer, response, body) => {
                     body = JSON.parse(body)
-                    let matchesArr = []
+                    let matchesData = {
+                        gameweek:gameweek,
+                        gameweek_total:length,
+                        matches:[]
+                    }
                     let matches = body.content.matches;
                     matches.forEach(ele=>{
-                        let formatDate = moment(ele.start_play).add(8,'hours').format('YYYY-MM-DD HH:mm:ss')
+                        let formatDate = moment(ele.start_play).add(8,'hours').format('YYYY-MM-DD HH:mm')
                         // formatDate = formatDate.setHours(formatDate.getHours()+8)
                         let obj = {
                             start_play: formatDate,
@@ -158,12 +163,14 @@ router.get('/schedule', (req, res, next) => {
                             fs_B: ele.fs_B,
                             team_B_logo: ele.team_B_logo,
                             team_B_name: ele.team_B_name,
-                            status: ele.status
+                            status: ele.status,
+                            gameweek:gameweek,
+                            gameweek_total:length
                         } 
-                        matchesArr.push(obj)
+                        matchesData.matches.push(obj)
                     })
                     
-                    res.json(matchesArr)
+                    res.json(matchesData)
                 })
             }
 

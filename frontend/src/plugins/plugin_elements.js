@@ -23,9 +23,13 @@ import{
     Dialog,
     Radio,
     Table,
-    TableColumn
+    TableColumn,
+    Option,
+    Select
 } from 'element-ui'
 
+Vue.use(Select)
+Vue.use(Option)
 Vue.use(Table)
 Vue.use(TableColumn)
 Vue.use(Dialog)

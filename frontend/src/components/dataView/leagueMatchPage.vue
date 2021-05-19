@@ -3,7 +3,7 @@
     <header>
       <div class="box">
         <div @click="selectTab(1)" :class="currentTabType == 1 ? 'active' : ''">积分榜</div>
-        <div @click="selectTab(2)" :class="currentTabType == 2 ? 'active' : ''">进球榜</div>
+        <div @click="selectTab(2)" :class="currentTabType == 2 ? 'active' : ''">射手榜</div>
         <div @click="selectTab(3)" :class="currentTabType == 3 ? 'active' : ''">助攻榜</div>
         <div @click="selectTab(4)" :class="currentTabType == 4 ? 'active' : ''">赛程</div>
       </div>

@@ -83,8 +83,6 @@ section {
 }
 .app-name {
   text-align: center;
-  font-size: 18px;
-  font-weight: 600;
 }
 .comment-number {
   margin-right: 10px;

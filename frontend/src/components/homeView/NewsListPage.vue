@@ -1,8 +1,38 @@
 <template>
   <div class="news-content" v-loading="loading" @scroll="scrollEvent" ref="scrollDiv">
-    <div v-if="newsType == '0'">推荐</div>
+    <div v-if="newsType == '0'">
+      <el-row
+        v-for="(item,index) in recommendList"
+        :key="index"
+        :newsid="item.id"
+        :typeid="item.type"
+        :currentindex="index"
+        @click="handleNewsItem"
+        class="news-item"
+      >
+        <el-col :span="18">
+          <p class="news-title">{{item.title}}</p>
+          <time>{{item.published_time}}</time>
+        </el-col>
+        <el-col :span="6">
+          <img style="height:100%;width:100%" :src="item.thumb" />
+        </el-col>
+      </el-row>
+      <div v-if="soccerNewsList.length > 0" class="load-more" @click="handleLoadMore">点击加载更多</div>
+      <div v-else class="no-more">没有更多了</div>
+      <div class="back-top" @click="handleBackTop">
+        <i class="el-icon-top"></i>
+      </div>
+    </div>
     <div v-else-if="newsType == '9'">
-      <el-card class="box-card" v-for="(item,index) in usernewsList" :newsid="item.news_id" :newsindex="index" :key="index" shadow="never">
+      <el-card
+        class="box-card"
+        v-for="(item,index) in usernewsList"
+        :newsid="item.news_id"
+        :newsindex="index"
+        :key="index"
+        shadow="never"
+      >
         <div class="user_info">
           <img :src="item.author_thumb" />
           <span class="nickname">{{item.author_nickname}}</span>
@@ -10,7 +40,7 @@
         </div>
         <div class="box-card-title">{{item.news_title}}</div>
         <div class="box-card-footer">
-            <span class="box-card-footer-read">阅读量{{item.read_num}}</span>
+          <span class="box-card-footer-read">阅读量{{item.read_num}}</span>
         </div>
       </el-card>
       <div v-if="usernewsList.length > 0" class="load-more" @click="handleLoadMoreUserNews">点击加载更多</div>
@@ -75,7 +105,8 @@ export default {
   computed: {
     ...mapState("soccerStore", {
       soccerNewsList: state => state.soccerNewsList,
-      usernewsList: state => state.usernewsList
+      usernewsList: state => state.usernewsList,
+      recommendList: state => state.recommendNewsList
     }),
     ...mapState("userStore", {
       user_id: state => state.user_id
@@ -147,22 +178,26 @@ export default {
      */
     getRecommendData() {
       this.loading = false;
-      this.$store.dispatch("soccerStore/getRecommendNewsList", this.user_id);
+      let that = this;
+      this.getRecommendNewsList(this.user_id).then(() => {
+        console.log(that.recommendList);
+      });
     },
     /**
      * 获取用户发表的动态信息
      */
     getWorldData() {
-        let that = this;
-        this.getUserNewsList().then(res=>{
-            console.log(res)
-            that.loading = false;
-        }).catch(err=>{
-            console.log(err);
-           that.loading = false;
-           that.$message("请求超时");
+      let that = this;
+      this.getUserNewsList()
+        .then(res => {
+          console.log(res);
+          that.loading = false;
         })
-      
+        .catch(err => {
+          console.log(err);
+          that.loading = false;
+          that.$message("请求超时");
+        });
     },
     /**
      * 获取足球新闻列表
@@ -188,7 +223,7 @@ export default {
       let pageid = e.currentTarget.attributes.newsid.value;
       let typeid = e.currentTarget.attributes.typeid.value;
       let index = e.currentTarget.attributes.currentindex.value;
-      let newsobj = this.soccerNewsList[index];
+      let newsobj = this.newsType == '0' ? this.recommendList[index] : this.soccerNewsList[index];
       soccerData.addHistory(this.user_id, newsobj);
       this.$router.push({ name: "detail", query: { pageid, typeid } });
     },
@@ -196,10 +231,10 @@ export default {
     /**
      * 点击查看用户动态详情
      */
-    handleUserNewsItem(e){
-        let news_id = e.currentTarget.attributes.newsid.value;
-        let index = e.currentTarget.attributes.newsindex.value;
-        this.$router.push({ name: "userNewsDetail", query: { news_id,index } });
+    handleUserNewsItem(e) {
+      let news_id = e.currentTarget.attributes.newsid.value;
+      let index = e.currentTarget.attributes.newsindex.value;
+      this.$router.push({ name: "userNewsDetail", query: { news_id, index } });
     },
     /**
      * 监听滚动事件
@@ -207,6 +242,7 @@ export default {
     scrollEvent() {
       // console.log("滚动距离：",this.$refs.scrollDiv.scrollTop);
       // console.log("offset:",$(".load-more").offset())
+      if (this.newsType == "0") return false;
       let offsettop = Math.floor($(".load-more").offset().top) - 30;
       let divHeight = $(".news-content").height();
       // console.log(offsettop,divHeight);
@@ -214,15 +250,15 @@ export default {
       else {
         $(".back-top").fadeOut("slow");
       }
-      if (offsettop - divHeight <= 0){
-        if(this.newsType == '0'){
-          console.log("推荐")
-        }else if(this.newsType == '9'){
+      if (offsettop - divHeight <= 0) {
+        if (this.newsType == "0") {
+          console.log("推荐");
+        } else if (this.newsType == "9") {
           this.handleLoadMoreUserNews();
-        }else{
+        } else {
           this.handleLoadMore();
         }
-      } 
+      }
     },
     /**
      * 点击加载更多
@@ -241,7 +277,7 @@ export default {
     /**
      * 点击加载更多用户动态
      */
-    handleLoadMoreUserNews(){
+    handleLoadMoreUserNews() {
       let arrLength = this.usernewsList.length - 1;
       let last_time = this.usernewsList[arrLength].sort_time;
       this.getNextUserNewsList(last_time);
@@ -373,18 +409,18 @@ time {
   font-weight: 600;
   font-size: 14px;
 }
-.send-time{
-    float: left;
-    font-size: 13px;
-    color: #aaa;
-    margin-left: 10px;
-    margin-top: 2px;
+.send-time {
+  float: left;
+  font-size: 13px;
+  color: #aaa;
+  margin-left: 10px;
+  margin-top: 2px;
 }
-.box-card-footer{
-    font-size: 13px;
-    color:#999;
+.box-card-footer {
+  font-size: 13px;
+  color: #999;
 }
-.box-card-footer-read{
-    float: right;
+.box-card-footer-read {
+  float: right;
 }
 </style>

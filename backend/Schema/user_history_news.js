@@ -7,7 +7,8 @@ var Schema = mongoose.Schema;
 var NewsSchema = new Schema({
     userphone:String,
     history:[],
-    mynews:[]
+    mynews:[],
+    recommend:[]
 });
 
 

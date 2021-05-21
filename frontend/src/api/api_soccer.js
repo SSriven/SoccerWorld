@@ -2,6 +2,7 @@ import request from '../http/request.js'
 
 
 const baseUrl = 'http://192.168.9.96:3000/soccer';
+const recommendUrl = 'http://192.168.9.96:3000'
 
 export default {
     /**
@@ -13,12 +14,12 @@ export default {
         57：更多赛事
      * @param {*} typeid 
      */
-    getSoccerNewsList(typeid){
+    getSoccerNewsList(typeid) {
         // console.log("调用api"+typeid)
-        return new Promise((resolve,reject)=>{
-            request.get(baseUrl,{params:{"typeid":typeid}}).then(res=>{
+        return new Promise((resolve, reject) => {
+            request.get(baseUrl, { params: { "typeid": typeid } }).then(res => {
                 resolve(res.data)
-            }).catch(err=>{
+            }).catch(err => {
                 reject(err)
             })
         })
@@ -28,12 +29,12 @@ export default {
      * @param {*} typeid 
      * @param {*} last_time 
      */
-    getMoreSoccerNewsList(typeid,last_time){
-        console.log("获取下一页新闻：",typeid,last_time);
-        return new Promise((resolve,reject)=>{
-            request.get(baseUrl + "/next",{params:{"typeid":typeid,"last_time":last_time}}).then(res=>{
+    getMoreSoccerNewsList(typeid, last_time) {
+        console.log("获取下一页新闻：", typeid, last_time);
+        return new Promise((resolve, reject) => {
+            request.get(baseUrl + "/next", { params: { "typeid": typeid, "last_time": last_time } }).then(res => {
                 resolve(res.data)
-            }).catch(err=>{
+            }).catch(err => {
                 reject(err)
             })
         })
@@ -44,12 +45,12 @@ export default {
      * @param {}} pageid 
      * @param {*} typeid 
      */
-    getNewsDetail(pageid,typeid){
-        console.log("获取新闻详情页",pageid,typeid)
-        return new Promise((resolve,reject)=>{
-            request.get(baseUrl + "/detail",{params:{"pageid":pageid,"typeid":typeid}}).then(res=>{
+    getNewsDetail(pageid, typeid) {
+        console.log("获取新闻详情页", pageid, typeid)
+        return new Promise((resolve, reject) => {
+            request.get(baseUrl + "/detail", { params: { "pageid": pageid, "typeid": typeid } }).then(res => {
                 resolve(res)
-            }).catch(err=>{
+            }).catch(err => {
                 reject(err)
             })
         })
@@ -60,12 +61,12 @@ export default {
      * @param {*} userphone 
      * @param {*} newsobj 
      */
-    addHistory(userphone,newsobj){
-        console.log("添加历史记录",newsobj)
-        return new Promise((resolve,reject)=>{
-            request.post(baseUrl + "/addHistory",{params:{"userphone":userphone,"newsobj":newsobj}}).then(res=>{
+    addHistory(userphone, newsobj) {
+        console.log("添加历史记录", newsobj)
+        return new Promise((resolve, reject) => {
+            request.post(baseUrl + "/addHistory", { params: { "userphone": userphone, "newsobj": newsobj } }).then(res => {
                 resolve(res)
-            }).catch(err=>{
+            }).catch(err => {
                 reject(err)
             })
         })
@@ -76,14 +77,24 @@ export default {
      * @param {*} newsid 
      * @param {*} commentobj 
      */
-    addComment(newsid,commentobj){
-        console.log("添加评论",newsid,commentobj);
-        return new Promise((resolve,reject)=>{
-            request.post(baseUrl + "/addComment",{newsid:newsid,commentobj:commentobj}).then(res=>{
+    addComment(newsid, commentobj) {
+        console.log("添加评论", newsid, commentobj);
+        return new Promise((resolve, reject) => {
+            request.post(baseUrl + "/addComment", { newsid: newsid, commentobj: commentobj }).then(res => {
                 resolve(res)
-            }).catch(err=>{
+            }).catch(err => {
                 reject(err)
             })
+        })
+    },
+
+    /**
+     * 获取推荐列表
+     * @param {*} userphone 
+     */
+    getRecommendList(userphone) {
+        return new Promise((resolve, reject) => {
+            request.get(recommendUrl + "/recommends", { params: { userphone: userphone } }).then(res => resolve(res)).catch(err => reject(err))
         })
     }
 }

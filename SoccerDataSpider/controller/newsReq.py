@@ -7,7 +7,6 @@ import json
 import time
 import urllib.request
 import bs4
-import pymongo
 import re
 
 

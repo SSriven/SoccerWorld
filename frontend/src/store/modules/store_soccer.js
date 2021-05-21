@@ -69,16 +69,28 @@ const actions = {
     },
 
 
+    /**
+     * 获取推荐列表
+     * @param {*} param0 
+     * @param {*} userid 
+     */
     getRecommendNewsList({commit},userid){
         console.log(userid)
-        commit('handleRecommendNewsList',[])
+        return new Promise((resolve,reject)=>{
+            soccerData.getRecommendList(userid).then(res=>{
+                console.log(res[0].recommends)
+                commit('handleRecommendNewsList',res[0].recommends)
+                resolve(res)
+            }).catch(err=>reject(err))
+        })
+        
     }
 }
 const mutations = {
 
 
-    handleRecommendNewsList: (state, recommendNewsList) => {
-        state.recommendNewsList = recommendNewsList
+    handleRecommendNewsList: (state, data) => {
+        state.recommendNewsList = data
     },
 
 
